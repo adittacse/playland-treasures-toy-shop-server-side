@@ -40,10 +40,41 @@ async function run() {
             res.send(result);
         });
 
+        // step-4: loading single toy data from mongodb by using single id
+        app.get("/toy/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await toysCollection.findOne(query);
+            res.send(result);
+        });
+
         // step-1: inserting toy data from client side to mongodb
         app.post("/toys", async (req, res) => {
             const addToy = req.body;
             const result = await toysCollection.insertOne(addToy);
+            res.send(result);
+        });
+
+        // step-5: update a toy
+        app.put("/toy/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedToy = req.body;
+            const toy = {
+                $set: {
+                    toyName: updatedToy.toyName,
+                    picture: updatedToy.picture,
+                    sellerName: updatedToy.sellerName,
+                    email: updatedToy.email,
+                    category: updatedToy.category,
+                    price: updatedToy.price,
+                    ratingFloat: updatedToy.ratingFloat,
+                    quantity: updatedToy.quantity,
+                    description: updatedToy.description
+                }
+            }
+            const result = await toysCollection.updateOne(filter, toy, options);
             res.send(result);
         });
 
