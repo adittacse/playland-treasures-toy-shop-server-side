@@ -29,10 +29,20 @@ async function run() {
 
         // add a toy
 
+        // step-2: get toys from mongodb based on logged user
+        app.get("/toys", async (req, res) => {
+            let query = {};
+            if (req.query?.email) {
+                query = { email: req.query.email };
+            }
+            const cursor = toysCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
         // step-1: inserting toy data from client side to mongodb
         app.post("/toys", async (req, res) => {
             const addToy = req.body;
-            console.log(addToy)
             const result = await toysCollection.insertOne(addToy);
             res.send(result);
         });
