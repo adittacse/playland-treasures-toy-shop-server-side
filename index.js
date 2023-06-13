@@ -28,7 +28,7 @@ async function run() {
         const toysCollection = client.db("toyShop").collection("toys");
 
         // add a toy
-        // test comment
+        
         // step-2: get toys from mongodb based on logged user
         app.get("/toys", async (req, res) => {
             let query = {};
